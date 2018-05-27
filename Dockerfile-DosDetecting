@@ -1,0 +1,11 @@
+FROM httpd:2.4
+COPY ./public-html/ /usr/local/apache2/htdocs/
+
+# installing mod_dosdetector
+RUN apt-get update && apt-get install -y git vim make gcc
+RUN ln -s /usr/local/apache2/bin/apxs /usr/sbin/apxs
+
+RUN git clone https://github.com/stanaka/mod_dosdetector
+RUN cd mod_dosdetector && make install
+
+COPY ./conf/dos-detecting-http.conf /usr/local/apache2/conf/httpd.conf
